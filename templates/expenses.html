@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Expenses</h1>
+    <form action="{{ url_for('show_expenses') }}" method="post">
+        <label for="currency">Display in:</label>
+        <select name="currency" id="currency">
+            <option value="Dollars" {% if selected_currency == 'Dollars' %} selected {% endif %}>Dollars</option>
+            <option value="Rupees" {% if selected_currency == 'Rupees' %} selected {% endif %}>Rupees</option>
+            <option value="Rubles" {% if selected_currency == 'Rubles' %} selected {% endif %}>Rubles</option>
+        </select>
+        <label for="category">Category:</label>
+        <select name="category" id="category">
+            <option value="All" {% if selected_category == 'All' %} selected {% endif %}>All</option>
+            <option value="Food" {% if selected_category == 'Food' %} selected {% endif %}>Food</option>
+            <option value="Travel" {% if selected_category == 'Travel' %} selected {% endif %}>Travel</option>
+            <option value="Study" {% if selected_category == 'Study' %} selected {% endif %}>Study</option>
+            <option value="Health" {% if selected_category == 'Health' %} selected {% endif %}>Health</option>
+        </select>
+        <button type="submit">Show</button>
+    </form>
+
+    <h2>Total Amount by Category:</h2>
+    <ul>
+        {% for category, total_amount in total_by_category.items() %}
+            <li>{{ category }}: {{ '%.2f'|format(total_amount) }}</li>
+        {% endfor %}
+    </ul>
+
+    <table>
+        <tr>
+            <th>Expense Type</th>
+            <th>Expense Name</th>
+            <th>Cost</th>
+        </tr>
+        {% for expense in expenses %}
+        <tr>
+            <td>{{ expense.expense_type }}</td>
+            <td>{{ expense.expense_name }}</td>
+            {% if selected_currency == 'Rupees' %}
+            <td>{{ '%.2f'|format(expense.cost_dollars * 83.45) }}</td>  <!-- Convert cost to Rupees -->
+            {% elif selected_currency == 'Rubles' %}
+            <td>{{ '%.2f'|format(expense.cost_dollars * 92.4) }}</td>   <!-- Convert cost to Rubles -->
+            {% else %}
+            <td>{{ '%.2f'|format(expense.cost_dollars) }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
