@@ -120,8 +120,10 @@ def show_expenses():
         category = expense.expense_type
         total_by_category[category] = total_by_category.get(category, 0) + expense.cost_dollars
 
-    return render_template('expenses.html', expenses=expenses, selected_currency=selected_currency,
-                           selected_category=selected_category, total_by_category=total_by_category)
+    total_expenses = sum(expense.cost_dollars for expense in expenses)
+
+    # Pass total_expenses to the template
+    return render_template('expenses.html', expenses=expenses, total_by_category=total_by_category, total_expenses=total_expenses)
 
 
 if __name__ == '__main__':
