@@ -42,7 +42,7 @@
     <h2>Total Amount by Category:</h2>
     <ul>
         {% for category, total_amount in total_by_category.items() %}
-            <li>{{ category }}: {{ '%.2f'|format(total_amount) }}</li>
+            <li>{{ category }}: {{ '%.2f'|format(total_amount) }} ({{ '%.2f'|format((total_amount / total_expenses) * 100) }}%)</li>
         {% endfor %}
     </ul>
 
