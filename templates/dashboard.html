@@ -8,7 +8,6 @@
 <body>
     <h1>Welcome to Your Dashboard, {{ username }}</h1>
 
-    <!-- Form for adding expenses -->
     <form action="{{ url_for('add_expense') }}" method="post">
         <label for="expense_type">Expense Type:</label>
         <select name="expense_type" id="expense_type">
@@ -16,7 +15,6 @@
             <option value="Travel">Travel</option>
             <option value="Study">Study</option>
             <option value="Health">Health</option>
-            <!-- Add more options for different expense types as needed -->
         </select>
         <br>
         <label for ="expense_name">Expense Name:</label>
@@ -30,13 +28,11 @@
             <option value="Rupees">Rupees</option>
             <option value="Rubles">Rubles</option>
             <option value="Dollars">Dollars</option>
-            <!-- Add more options for different currencies as needed -->
         </select>
         <br>
         <button type="submit">Add Expense</button>
     </form>
 
-    <!-- Button to show expenses -->
     <form action="{{ url_for('show_expenses') }}" method="get">
         <button type="submit">Show Expenses</button>
     </form>
