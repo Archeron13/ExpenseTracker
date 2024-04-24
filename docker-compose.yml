@@ -1,0 +1,26 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    environment:
+      FLASK_APP: main.py
+      FLASK_ENV: development
+  db:
+    image: "postgres:latest"
+    environment:
+      POSTGRES_DB: "users"
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+    volumes:
+      - "pgdata:/var/lib/postgresql/data"
+
+volumes:
+  pgdata:
