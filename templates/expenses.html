@@ -56,13 +56,7 @@
         <tr>
             <td>{{ expense.expense_type }}</td>
             <td>{{ expense.expense_name }}</td>
-            {% if selected_currency == 'Rupees' %}
-            <td>{{ '%.2f'|format(expense.cost_dollars * 83.45) }}</td>  <!-- Convert cost to Rupees -->
-            {% elif selected_currency == 'Rubles' %}
-            <td>{{ '%.2f'|format(expense.cost_dollars * 92.4) }}</td>   <!-- Convert cost to Rubles -->
-            {% else %}
-            <td>{{ '%.2f'|format(expense.cost_dollars) }}</td>
-            {% endif %}
+            <td>{{ '%.2f'|format(expense.cost_display) }}</td>  <!-- Display cost in selected currency -->
         </tr>
         {% endfor %}
     </table>
