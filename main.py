@@ -99,7 +99,6 @@ def show_expenses():
     if request.method == 'POST':
         selected_currency = request.form.get('currency', 'Dollars')  # Default to Dollars
         selected_category = request.form.get('category', 'All')  # Default to All categories
-        print("Selected category:", selected_category)
     else:
         selected_currency = 'Dollars'  # Default to Dollars
         selected_category = 'All'  # Default to All categories
@@ -107,23 +106,33 @@ def show_expenses():
     user = User.query.filter_by(username=username).first()
     expenses = user.expenses
 
-    if selected_category != 'All':
-        filtered_expenses = []
+    # Apply currency conversion if necessary
+    if selected_currency != 'Dollars':
         for expense in expenses:
-            if expense.expense_type == selected_category:
-                filtered_expenses.append(expense)
-        expenses = filtered_expenses
+            if selected_currency == 'Rupees':
+                expense.cost_display = expense.cost_dollars * 83.45  # Conversion rate: 1 Rupee = 1 / 83.45 Dollars
+            elif selected_currency == 'Rubles':
+                expense.cost_display = expense.cost_dollars * 92.4  # Conversion rate: 1 Ruble = 1 / 92.4 Dollars
+            else:
+                expense.cost_display = expense.cost_dollars
+    else:
+        # Reset cost_display to cost_dollars if currency is Dollars
+        for expense in expenses:
+            expense.cost_display = expense.cost_dollars
+
+    # Filter expenses by category if needed
+    if selected_category != 'All':
+        expenses = [expense for expense in expenses if expense.expense_type == selected_category]
 
     # Calculate total amount by category
-    total_by_category = {}
+    total_by_category = defaultdict(float)
     for expense in expenses:
         category = expense.expense_type
-        total_by_category[category] = total_by_category.get(category, 0) + expense.cost_dollars
+        total_by_category[category] += expense.cost_display
 
-    total_expenses = sum(expense.cost_dollars for expense in expenses)
+    total_expenses = sum(expense.cost_display for expense in expenses)
 
-    # Pass total_expenses to the template
-    return render_template('expenses.html', expenses=expenses, total_by_category=total_by_category, total_expenses=total_expenses)
+    return render_template('expenses.html', expenses=expenses, total_by_category=total_by_category, total_expenses=total_expenses, selected_currency=selected_currency)
 
 
 if __name__ == '__main__':
