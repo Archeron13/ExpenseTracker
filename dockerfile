@@ -2,15 +2,16 @@ FROM python:3.9-slim
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV FLASK_APP = main.py
 
-WORKDIR /ExpenseTracker
+WORKDIR /app
 
 COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY . /ExpenseTracker
+COPY . .
 
 EXPOSE 5000
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["python", "main.py"]
