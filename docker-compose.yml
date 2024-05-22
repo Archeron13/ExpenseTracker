@@ -1,26 +1,30 @@
-version: '3'
+version: '3.8'
+
 services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 30634
+      POSTGRES_DB: expense_tracker
+    volumes:
+      - db_data:/var/lib/postgresql/data
     ports:
-      - "5000:5000"
+      - "5402:5432"
+
+  web:
+    image: test
+    container_name: flask_web_app
+    environment:
+      FLASK_APP: app.py
     volumes:
       - .:/app
+    ports:
+      - "5004:5000"
     depends_on:
-      - db
-    environment:
-      FLASK_APP: main.py
-      FLASK_ENV: development
-  db:
-    image: "postgres:latest"
-    environment:
-      POSTGRES_DB: "users"
-      POSTGRES_USER: "user"
-      POSTGRES_PASSWORD: "password"
-    volumes:
-      - "pgdata:/var/lib/postgresql/data"
+      - postgres
 
 volumes:
-  pgdata:
+  db_data:
+
