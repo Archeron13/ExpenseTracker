@@ -17,3 +17,11 @@ Technology Stack
     SQLAlchemy for database management
     HTML/CSS/JavaScript for frontend
     Third-party libraries for currency conversion and bank API integration
+
+To run with docker compose
+
+    docker compose build
+    docker compose run
+
+The app will run on 0.0.0.0/5004
+
